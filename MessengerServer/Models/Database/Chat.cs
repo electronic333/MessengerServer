@@ -2,5 +2,6 @@
 
 public class Chat {
   public int Id { get; set; }
-  public List<User> Users { get; set; } = default!;
+  public IEnumerable<User> Users { get; set; } = default!;
+  public IEnumerable<Message> Messages { get; set; } = default!;
 }
