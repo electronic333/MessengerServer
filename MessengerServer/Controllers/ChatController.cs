@@ -3,18 +3,19 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace MessengerServer.Controllers;
 
-[Route("/[controller]")]
+[Route("/api/chatting")]
 [ApiController]
 public class ChatController: ControllerBase {
   private readonly DatabaseContext _db;
+  private readonly ILogger<ChatController> _logger;
 
-  public ChatController (DatabaseContext db) {
+  public ChatController (DatabaseContext db, ILogger<ChatController> logger) {
     _db = db;
+    _logger = logger;
   }
 
-  public IActionResult Show (int id) {
-    return Content($"<html><body><h1>Id: {
-      id}</h1><br><h2>Records count: {
-      _db.Messages.Count()}</h2></body></html>");
+  [HttpGet]
+  public IActionResult Show () {
+    return Content("<html><body><h1>Hello, User!</h1></body></html>", "text/html");
   }
 }
