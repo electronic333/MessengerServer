@@ -8,7 +8,7 @@ public class DatabaseContext : DbContext {
 
   public DbSet<User> Users { get; set; } = default!;
   public DbSet<Chat> Chats { get; set; } = default!;
-  public DbSet<AbstractMessage> Messages { get; set; } = default!;
+  public DbSet<Message> Messages { get; set; } = default!;
 
   public DatabaseContext (ILogger<DatabaseContext> logger, DbContextOptions<DatabaseContext> options) 
     : base(options)  
@@ -23,11 +23,5 @@ public class DatabaseContext : DbContext {
     else {
       _logger.LogInformation("Connected to existed database.");
     }
-  }
-
-  protected override void OnModelCreating (ModelBuilder modelBuilder) {
-    modelBuilder.Entity<TextMessage>();
-
-    base.OnModelCreating(modelBuilder);
   }
 }
