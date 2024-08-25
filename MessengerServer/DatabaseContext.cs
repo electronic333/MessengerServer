@@ -25,4 +25,13 @@ public class DatabaseContext : DbContext {
       _logger.LogInformation("Connected to existed database.");
     }
   }
+
+  protected override void OnModelCreating (ModelBuilder modelBuilder) {
+    modelBuilder.Entity<User>(user => {
+      user.HasIndex(u => u.Name).IsUnique();
+      user.HasIndex(u => u.Email).IsUnique();
+    });
+
+    base.OnModelCreating(modelBuilder);
+  }
 }
