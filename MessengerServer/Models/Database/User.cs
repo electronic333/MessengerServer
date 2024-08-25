@@ -12,4 +12,7 @@ public class User {
 
   [JsonIgnore]
   public IEnumerable<Message> Messages { get; set; } = default!;
+
+  [JsonIgnore]
+  public IEnumerable<Invite> Invites { get; set; } = default!;
 }

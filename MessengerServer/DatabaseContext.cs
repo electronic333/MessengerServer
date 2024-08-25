@@ -9,6 +9,7 @@ public class DatabaseContext : DbContext {
   public DbSet<User> Users { get; set; } = default!;
   public DbSet<Chat> Chats { get; set; } = default!;
   public DbSet<Message> Messages { get; set; } = default!;
+  public DbSet<Invite> Invites { get; set; } = default!;
 
   public DatabaseContext (ILogger<DatabaseContext> logger, DbContextOptions<DatabaseContext> options) 
     : base(options)  
