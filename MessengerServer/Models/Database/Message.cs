@@ -1,7 +1,7 @@
 ﻿namespace MessengerServer.Models.Database;
 
 public class Message {
-  public int Id { get; set; }
+  public string Id { get; set; } = default!;
   public Chat Chat { get; set; } = default!;
   public User Sender { get; set; } = default!;
   public DateTime CreationTime { get; set; }

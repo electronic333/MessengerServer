@@ -1,12 +1,12 @@
 ﻿using MessengerServer.Models.Database;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace MessengerServer;
 
-public class MessengerContext : DbContext {
+public class MessengerContext : IdentityDbContext<User> {
   private readonly ILogger _logger;
 
-  public DbSet<User> Users { get; set; } = default!;
   public DbSet<Chat> Chats { get; set; } = default!;
   public DbSet<Message> Messages { get; set; } = default!;
   public DbSet<Invite> Invites { get; set; } = default!;
@@ -27,10 +27,10 @@ public class MessengerContext : DbContext {
   }
 
   protected override void OnModelCreating (ModelBuilder modelBuilder) {
-    modelBuilder.Entity<User>(user => {
-      user.HasIndex(u => u.Name).IsUnique();
-      user.HasIndex(u => u.Email).IsUnique();
-    });
+    //modelBuilder.Entity<User>(user => {
+    //  user.HasIndex(u => u.UserName).IsUnique();
+    //  user.HasIndex(u => u.Email).IsUnique();
+    //});
 
     modelBuilder.Entity<User>().HasMany(u => u.ChatsMember).WithMany(c => c.Users);
 

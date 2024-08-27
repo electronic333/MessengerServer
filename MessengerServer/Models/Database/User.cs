@@ -1,9 +1,8 @@
-﻿namespace MessengerServer.Models.Database;
+﻿using Microsoft.AspNetCore.Identity;
 
-public class User {
-  public int Id { get; set; }
-  public string Name { get; set; } = "";
-  public string Email { get; set; } = "";
+namespace MessengerServer.Models.Database;
+
+public class User : IdentityUser {
   public ICollection<Chat> ChatsOwn { get; set; } = default!;
   public ICollection<Chat> ChatsMember { get; set; } = default!;
   public ICollection<Message> Messages { get; set; } = default!;

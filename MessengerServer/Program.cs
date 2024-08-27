@@ -1,4 +1,7 @@
 using MessengerServer;
+using MessengerServer.Extensions;
+using MessengerServer.Models.Database;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Serilog;
@@ -20,30 +23,34 @@ static void ConfigureApplicationBuilder (WebApplicationBuilder builder) {
       configuration.ReadFrom.Configuration(context.Configuration));
 
   builder.Services.AddControllersWithViews();
-  builder.Services.AddSingleton<MessengerContext>();
-  builder.Services.AddSingleton(ConfigureOptions);
+  builder.Services.AddDbContext<MessengerContext>(ConfigureDbContext);
+
+  builder.Services.AddAuthorization();
+  builder.Services.AddAuthentication().AddCookie(IdentityConstants.ApplicationScheme);
+
+  builder.Services.AddIdentityCore<User>().AddEntityFrameworkStores<MessengerContext>().AddApiEndpoints();
 
   builder.Services.AddSwaggerGen();
 }
 
-static DbContextOptions<MessengerContext> ConfigureOptions (IServiceProvider provider) {
-  var configuration = provider.GetRequiredService<IConfiguration>();
-  var connection = configuration.GetConnectionString("Messenger");
-
-  return new DbContextOptionsBuilder<MessengerContext>()
-    .UseSqlite(connection)
-    .Options;
+static void ConfigureDbContext (IServiceProvider provider, DbContextOptionsBuilder builder) {
+  string? connection = provider.GetRequiredService<IConfiguration>().GetConnectionString("Messenger");
+  builder.UseSqlite(connection);
 }
 
 static void ConfigureApplication (WebApplication app) {
   if (app.Environment.IsDevelopment()) {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.ApplyMigrations();
   }
   else {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
   }
+
+  app.MapIdentityApi<User>();
 
   app.UseHttpsRedirection();
   app.UseStaticFiles();
