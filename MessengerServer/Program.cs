@@ -20,20 +20,27 @@ static void ConfigureApplicationBuilder (WebApplicationBuilder builder) {
       configuration.ReadFrom.Configuration(context.Configuration));
 
   builder.Services.AddControllersWithViews();
-  builder.Services.AddSingleton<DatabaseContext>();
+  builder.Services.AddSingleton<MessengerContext>();
   builder.Services.AddSingleton(ConfigureOptions);
+
+  builder.Services.AddSwaggerGen();
 }
 
-static DbContextOptions<DatabaseContext> ConfigureOptions (IServiceProvider provider) {
+static DbContextOptions<MessengerContext> ConfigureOptions (IServiceProvider provider) {
   var configuration = provider.GetRequiredService<IConfiguration>();
   var connection = configuration.GetConnectionString("Messenger");
-  return new DbContextOptionsBuilder<DatabaseContext>()
+
+  return new DbContextOptionsBuilder<MessengerContext>()
     .UseSqlite(connection)
     .Options;
 }
 
 static void ConfigureApplication (WebApplication app) {
-  if (!app.Environment.IsDevelopment()) {
+  if (app.Environment.IsDevelopment()) {
+    app.UseSwagger();
+    app.UseSwaggerUI();
+  }
+  else {
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
   }
@@ -43,6 +50,6 @@ static void ConfigureApplication (WebApplication app) {
   app.UseSerilogRequestLogging();
   app.UseRouting();
   app.MapControllerRoute(
-      name: "default",
-      pattern: "{controller=Home}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 }
