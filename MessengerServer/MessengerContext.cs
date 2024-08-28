@@ -27,11 +27,6 @@ public class MessengerContext : IdentityDbContext<User> {
   }
 
   protected override void OnModelCreating (ModelBuilder modelBuilder) {
-    //modelBuilder.Entity<User>(user => {
-    //  user.HasIndex(u => u.UserName).IsUnique();
-    //  user.HasIndex(u => u.Email).IsUnique();
-    //});
-
     modelBuilder.Entity<User>().HasMany(u => u.ChatsMember).WithMany(c => c.Users);
 
     modelBuilder.Entity<Chat>().HasOne(c => c.Creator).WithMany(u => u.ChatsOwn);
